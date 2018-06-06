@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokemon-discord", "Pokemon-discord\Pokemon-discord.csproj", "{DF36864B-22BF-4E3C-B317-5488536B9086}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF36864B-22BF-4E3C-B317-5488536B9086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF36864B-22BF-4E3C-B317-5488536B9086}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF36864B-22BF-4E3C-B317-5488536B9086}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF36864B-22BF-4E3C-B317-5488536B9086}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {770E4B5A-F0D2-4E26-B608-F164CA506876}
+	EndGlobalSection
+EndGlobal
