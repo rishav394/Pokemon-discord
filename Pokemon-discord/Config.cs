@@ -11,26 +11,25 @@ namespace Pokemon_discord
 {
     class Config
     {
-        private const string configfile = "config.json";
-        private const string configfolder = "Resources";
+        private const string configFolder = "Resources";
+        private const string configFile = "config.json";
 
         public static BotConfig bot;
 
         static Config()
         {
-            if (!Directory.Exists(configfolder))
-            {
-                Directory.CreateDirectory(configfolder);
-            }
-            if (!File.Exists(configfolder + "/" + configfile))
+            if (!Directory.Exists(configFolder))
+                Directory.CreateDirectory(configFolder);
+
+            if (!File.Exists(configFolder + "/" + configFile))
             {
                 bot = new BotConfig();
                 string json = JsonConvert.SerializeObject(bot, Formatting.Indented);
-                File.WriteAllText(configfolder + "/" + configfile, json);
+                File.WriteAllText(configFolder + "/" + configFile, json);
             }
             else
             {
-                string json = File.ReadAllText(configfolder + "/" + configfile);
+                string json = File.ReadAllText(configFolder + "/" + configFile);
                 bot = JsonConvert.DeserializeObject<BotConfig>(json);
             }
         }
