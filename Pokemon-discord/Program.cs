@@ -17,6 +17,11 @@ namespace Pokemon_discord
 
         public async Task StartAsync()
         {
+             
+            //string name = "Gg";
+            //string bot_name = "Shaktiman";
+            //Console.WriteLine(Utilities.get_formatted_alret("WELCOME", name, bot_name));
+            //return;
             if (Config.bot.token == "" || Config.bot.token == null) return;
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {

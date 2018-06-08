@@ -1,3 +1,7 @@
 {
-  "TEST": "HELLO WORLD!"
+  "TEST": "HELLO WORLD!",
+  "WELCOME": "Hello, {0}. How can {1} help you today?",
+  "SECRET": "The secret is `123ABCD`",
+  "CHECK_DM": "{0}, check your DM.",
+  "PERMISSION_DENIED": ":x:  {0}, you dont hae sufficient permission to use this command"
 }

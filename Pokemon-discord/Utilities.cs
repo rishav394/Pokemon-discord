@@ -15,18 +15,26 @@ namespace Pokemon_discord
         static Utilities()
         {
             string json = File.ReadAllText("SystemLang/alerts.json");
-            var data = JsonConvert.DeserializeObject<dynamic>(json);
-            alerts = data.ToObject<Dictionary<string, string>>();
-            
+            alerts = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
 
-        public static string GetAlert(string key)
+        //public static string GetAlert(string key)
+        //{
+        //    if (alerts.ContainsKey(key))
+        //    {
+        //        return alerts[key];
+        //    }
+        //    return "No key Found";
+        //}
+
+        public static string Get_formatted_alret(string key,params object[] param) 
         {
             if (alerts.ContainsKey(key))
             {
-                return alerts[key];
+                return String.Format(alerts[key], param);
             }
-            return "";
+            return "No key Found";
         }
+
     }
 }
