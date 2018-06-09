@@ -3,6 +3,7 @@
 
 #config files
 Resources/
+SystemLang/
 
 # User-specific files
 *.suo

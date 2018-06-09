@@ -3,6 +3,6 @@
   "WELCOME": "Hello, {0}. How can {1} help you today?",
   "SECRET": "The secret is `123ABCD`",
   "CHECK_DM": "{0}, check your DM.",
-  "PERMISSION_DENIED": ":x:  {0}, you dont hae sufficient permission to use this command",
+  "PERMISSION_DENIED": ":x:  {0}, you dont have sufficient permission to use this command",
   "ABANDON": "When in danger, when in doubt \nRun in circles, scream and shout \nAbandon ship! Abandon ship!"
 }
