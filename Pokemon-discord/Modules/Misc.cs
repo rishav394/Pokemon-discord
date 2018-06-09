@@ -12,42 +12,73 @@ namespace Pokemon_discord.Modules
     public class Misc : ModuleBase<SocketCommandContext>  
     {
         private const string ThumbnailUrl = "https://assets.pokemon.com/static2/_ui/img/global/three-characters.png";
-        
+        private const string AbandonURL = "https://cdn.shopify.com/s/files/1/1024/7339/files/logoB_large.png?14615439934852209744";
+        private readonly string TargetRole = "Moderator";
 
-        [Command("Stats")]
-        public async Task Stats()
+        [Command("Abandon ship")]
+        public async Task ShutDown()
         {
-            var account = UserAccounts.GetAccount(Context.User);
-            await Context.Channel.SendMessageAsync($"Hey {Context.User.Mention}, You have {account.Size} long sandwhiches and {account.XP} XP.");
+            var embed = new EmbedBuilder()
+                .WithColor(Color.Blue)
+                .WithTitle("Wait What????")
+                .WithDescription(Utilities.Get_formatted_alret("ABANDON"))
+                .WithThumbnailUrl(AbandonURL)
+                .Build();
+
+            await Context.Channel.SendMessageAsync("", false, embed);
+
+            var dmChannel = await Context.User.GetOrCreateDMChannelAsync();
+            await dmChannel.SendMessageAsync("Shutdown complete.");
+            await dmChannel.SendMessageAsync("`Environment.Exit(1)`");
+
+
+            Environment.Exit(1);
         }
 
+        #region stats
         [Command("Stats")]
-        public async Task StatsOther(SocketUser socketUser)
+        [Alias("status")]
+        public async Task StatsOther(SocketUser socketUser = null)
         {
+            if (socketUser == null)
+            {
+                socketUser = Context.User;
+            }
             var account = UserAccounts.GetAccount(socketUser);
             await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You have {account.Size} long sandwhiches and {account.XP} XP.");
         }
+        #endregion
+
+        #region Daily
 
         [Command("Daily")]
-        public async Task Daily()
+        [Alias("add")]
+        public async Task Daily(SocketUser socketUser = null)
         {
-            var account = UserAccounts.GetAccount(Context.User);
-            account.XP += 200;
-            await Context.Channel.SendMessageAsync($"Hey {Context.User.Mention}, You gained 200 XP.");
-            UserAccounts.SaveAccounts();
+            if (socketUser != null)
+            {
+                if (IsUserRoleHolder((SocketGuildUser)Context.User, TargetRole))
+                {
+                    var account = UserAccounts.GetAccount(socketUser);
+                    account.XP += 200;
+                    await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
+                    UserAccounts.SaveAccounts();
+                }
+                else
+                {
+                    await Context.Channel.SendMessageAsync($"Mmm sorry {Context.User.Mention}, You need to be a {TargetRole} to be able to do so");
+                }
+            }
+            else
+            {
+                socketUser = Context.User;
+                var account = UserAccounts.GetAccount(socketUser);
+                account.XP += 200;
+                await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
+                UserAccounts.SaveAccounts();
+            }
         }
-
-        [Command("Daily")]
-        [RequireUserPermission(GuildPermission.MentionEveryone)]
-        public async Task Daily(SocketUser socketUser)
-        {
-            var account = UserAccounts.GetAccount(socketUser);
-            account.XP += 200;
-            await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
-            UserAccounts.SaveAccounts();
-        }
-
-
+        #endregion
 
         #region Pick
         [Command("Pick")]
@@ -75,7 +106,7 @@ namespace Pokemon_discord.Modules
             ///<summary>
             ///User is not secret owner. Denied.
             /// </summary>
-            if (!UserIsSecretOwner((SocketGuildUser)(Context.User), "noob")) 
+            if (!IsUserRoleHolder((SocketGuildUser)(Context.User), TargetRole)) 
             {
                 Console.WriteLine("User is not secret owner");
                 await Context.Channel.SendMessageAsync(Utilities.Get_formatted_alret("PERMISSION_DENIED", Context.User.Mention));
@@ -163,13 +194,18 @@ namespace Pokemon_discord.Modules
         #endregion
 
 
-        public bool UserIsSecretOwner(SocketGuildUser user, string targetRoleName) 
+        public bool IsUserRoleHolder(SocketGuildUser user, string targetRoleName) 
         {
             var result = from r in user.Guild.Roles
                          where r.Name == targetRoleName
                          select r.Id;
             ulong targetRoleID = result.FirstOrDefault();
-            if (targetRoleID == 0) return false;
+            if (targetRoleID == 0)
+            {
+                Console.WriteLine("Target role was not found :( ");
+                return false;
+            }
+
             var targetRole = user.Guild.GetRole(targetRoleID);
             return user.Roles.Contains(targetRole);
         }

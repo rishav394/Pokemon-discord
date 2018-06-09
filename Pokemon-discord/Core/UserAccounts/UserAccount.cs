@@ -14,5 +14,7 @@ namespace Pokemon_discord.Core.UserAccounts
 
         public uint XP { get; set; }
 
+        public DateTime Dt { get; set; }
+
     }
 }
