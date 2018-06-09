@@ -145,6 +145,9 @@
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Core\DataManager.cs" />
+    <Compile Include="Core\UserAccounts\UserAccount.cs" />
+    <Compile Include="Core\UserAccounts\UserAccounts.cs" />
     <Compile Include="DataStorage.cs" />
     <Compile Include="Modules\Misc.cs" />
     <Compile Include="Program.cs" />
@@ -161,9 +164,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Folder\UserAccounts\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

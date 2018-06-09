@@ -11,34 +11,27 @@ namespace Pokemon_discord
     class DataStorage
     {
         public static Dictionary<string, string> pairs = new Dictionary<string, string>();
+        private static readonly string FileLocation = "DataStorage.json";
 
         static DataStorage()
         {
             //Load data
-            if (!ValidateData("DataStorage.json"))
+            if (!File.Exists(FileLocation))
             {
+                File.WriteAllText(FileLocation, "");
+                SaveData();
                 return;
             }
-            string json = File.ReadAllText("DataStorage.json");
+            string json = File.ReadAllText(FileLocation);
             pairs = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
 
         public static void SaveData()
         {
             string json = JsonConvert.SerializeObject(pairs, Formatting.Indented);
-            File.WriteAllText("DataStorage.json", json);
+            File.WriteAllText(FileLocation, json);
         }
 
-        public static bool ValidateData(string file)
-        {
-            if (!File.Exists(file))
-            {
-                File.WriteAllText(file, "");
-                SaveData();
-                return false;
-            }
-            return true;
-        }
     }
 
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Pokemon_discord.Core.UserAccounts;
 
 namespace Pokemon_discord.Modules
 {
@@ -13,19 +13,41 @@ namespace Pokemon_discord.Modules
     {
         private const string ThumbnailUrl = "https://assets.pokemon.com/static2/_ui/img/global/three-characters.png";
         
-        #region Echo
-        [Command("echo")]
-        public async Task Echo([Remainder]string message)
-        {
-            var embed = new EmbedBuilder()
-                .WithTitle("Requested by " + Context.User)
-                .WithDescription(message)
-                .WithColor(Color.Blue)
-                .Build();
 
-            await Context.Channel.SendMessageAsync("", false, embed); 
+        [Command("Stats")]
+        public async Task Stats()
+        {
+            var account = UserAccounts.GetAccount(Context.User);
+            await Context.Channel.SendMessageAsync($"Hey {Context.User.Mention}, You have {account.Size} long sandwhiches and {account.XP} XP.");
         }
-        #endregion
+
+        [Command("Stats")]
+        public async Task StatsOther(SocketUser socketUser)
+        {
+            var account = UserAccounts.GetAccount(socketUser);
+            await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You have {account.Size} long sandwhiches and {account.XP} XP.");
+        }
+
+        [Command("Daily")]
+        public async Task Daily()
+        {
+            var account = UserAccounts.GetAccount(Context.User);
+            account.XP += 200;
+            await Context.Channel.SendMessageAsync($"Hey {Context.User.Mention}, You gained 200 XP.");
+            UserAccounts.SaveAccounts();
+        }
+
+        [Command("Daily")]
+        [RequireUserPermission(GuildPermission.MentionEveryone)]
+        public async Task Daily(SocketUser socketUser)
+        {
+            var account = UserAccounts.GetAccount(socketUser);
+            account.XP += 200;
+            await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
+            UserAccounts.SaveAccounts();
+        }
+
+
 
         #region Pick
         [Command("Pick")]
@@ -48,13 +70,12 @@ namespace Pokemon_discord.Modules
 
         #region Secret
         [Command("secret")]
-        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task RevealSecret([Remainder]string arguments = "") 
         {
             ///<summary>
             ///User is not secret owner. Denied.
             /// </summary>
-            if (!UserIsSecretOwner((SocketGuildUser)(Context.User)))
+            if (!UserIsSecretOwner((SocketGuildUser)(Context.User), "noob")) 
             {
                 Console.WriteLine("User is not secret owner");
                 await Context.Channel.SendMessageAsync(Utilities.Get_formatted_alret("PERMISSION_DENIED", Context.User.Mention));
@@ -84,9 +105,9 @@ namespace Pokemon_discord.Modules
         [Command("Add")]
         public async Task GetData([Remainder]string arguments)
         {
-            await Context.Channel.SendMessageAsync("DataStorage has " + DataStorage.pairs.Count + " pairs.");
             DataStorage.pairs.Add(arguments.Split('=', ';', '|')[0], arguments.Split('=', ';', '|')[1]);
             DataStorage.SaveData();
+            await Context.Channel.SendMessageAsync("DataStorage has " + DataStorage.pairs.Count + " pairs.");
         }
         #endregion
 
@@ -127,7 +148,7 @@ namespace Pokemon_discord.Modules
             {
                 desc += x.Key + " " + x.Value + "\n";
             }
-            //desc += "\b";
+            desc += "\b";
             var embed = new EmbedBuilder()
             .WithTitle("Requested by " + Context.User.Mention)
             .WithColor(Color.Gold)
@@ -142,9 +163,8 @@ namespace Pokemon_discord.Modules
         #endregion
 
 
-        public bool UserIsSecretOwner(SocketGuildUser user)
+        public bool UserIsSecretOwner(SocketGuildUser user, string targetRoleName) 
         {
-            string targetRoleName = "noob";
             var result = from r in user.Guild.Roles
                          where r.Name == targetRoleName
                          select r.Id;
