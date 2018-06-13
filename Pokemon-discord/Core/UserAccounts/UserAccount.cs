@@ -16,5 +16,9 @@ namespace Pokemon_discord.Core.UserAccounts
 
         public DateTime Dt { get; set; }
 
+        public ulong[] repper { get; set; }
+
+        public int countem { get; set; }
+
     }
 }

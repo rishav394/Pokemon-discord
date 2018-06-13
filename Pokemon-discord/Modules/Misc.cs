@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using System.Net;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using NReco.ImageGenerator;
 using Pokemon_discord.Core.UserAccounts;
+using Newtonsoft.Json;
 
 namespace Pokemon_discord.Modules
 {
@@ -15,6 +19,86 @@ namespace Pokemon_discord.Modules
         private const string AbandonURL = "https://cdn.shopify.com/s/files/1/1024/7339/files/logoB_large.png?14615439934852209744";
         private readonly string TargetRole = "Moderator";
 
+        [Command("rep")]
+        public async Task repped(SocketUser socketUser)
+        {
+            var account = UserAccounts.GetAccount(Context.User);
+
+            if (account.repper.Contains(socketUser.Id))
+            {
+                await ReplyAsync("Hey Hey Hey you already did it once.");
+            }
+            else
+            {
+                account.repper[account.countem++] = socketUser.Id;
+                await ReplyAsync("Okay you +repped " + socketUser.Username);
+            }
+            UserAccounts.SaveAccounts();
+        }
+
+        [Command("yify")]
+        public async Task GetYify([Remainder]string args = "")
+        {
+            string json = "";
+            using (WebClient client = new WebClient())
+            {
+                json = client.DownloadString("https://yts.am/api/v2/list_movies.json?quality=3D");
+            }
+
+            var dataObject = JsonConvert.DeserializeObject<dynamic>(json);
+            string movie_count = dataObject.data.movie_count.ToString();
+            string status = dataObject.status_message.ToString();
+            string first_title = dataObject.data.movies[0].title.ToString();
+
+            var embed = new EmbedBuilder();
+            embed.WithTitle("YIFY returned the following response");
+            embed.WithColor(Color.Blue);
+            embed.AddField("Status", status);
+            embed.AddField("Total results", movie_count);
+            embed.AddField("Movie Name", first_title);
+            embed.WithThumbnailUrl("https://yts.am/assets/images/website/og_yts_logo.png");
+
+            await Context.Channel.SendMessageAsync("", false, embed.Build());
+
+            //await ReplyAsync($"Yify returned {status} with movies count of {movie_count} and the firt movie is {first_title}");
+        }
+        
+        [Command("Person")]
+        public async Task GetRandom([Remainder]string args = "")
+        {
+            string json = "";
+            using (WebClient client = new WebClient())
+            {
+                json = client.DownloadString("https://randomuser.me/api/?gender=male&nat=ru");
+            }
+
+            var dataObject = JsonConvert.DeserializeObject<dynamic>(json);
+            string gender = dataObject.results[0].gender.ToString();
+            string middlename = dataObject.results[0].name.first.ToString();
+            string pic = dataObject.results[0].picture.large.ToString();
+            await ReplyAsync($"Gender : {middlename} and {pic}");
+        }
+        
+        [Command("help")]
+        public async Task DisplayListOfAllCommands([Remainder]string args = "")
+        {
+            var r = Context.Message.MentionedUsers.FirstOrDefault();
+           // await ReplyAsync("<@370963330782986250> mission short");
+        }
+        
+        [Command("hello")]
+        public async Task ImageShit([Remainder]string args = "")
+        {
+            string css = "<style>\n	h1{\n		color: rgb(27,82,122);\n	}\n";
+            string html = String.Format("<h1>Hello {0}</h1>", Context.User.Username);
+            var jpegBytes = new HtmlToImageConverter
+            {
+                Width = 200,
+                Height = 70
+            }.GenerateImage(css + html, NReco.ImageGenerator.ImageFormat.Jpeg);
+            await Context.Channel.SendFileAsync(new MemoryStream(jpegBytes), "Hello.jpeg");
+        }
+        
         [Command("Abandon ship")]
         public async Task ShutDown()
         {
@@ -34,8 +118,7 @@ namespace Pokemon_discord.Modules
 
             Environment.Exit(1);
         }
-
-        #region stats
+        
         [Command("Stats")]
         [Alias("status")]
         public async Task StatsOther(SocketUser socketUser = null)
@@ -47,15 +130,19 @@ namespace Pokemon_discord.Modules
             var account = UserAccounts.GetAccount(socketUser);
             await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You have {account.Size} long sandwhiches and {account.XP} XP.");
         }
-        #endregion
-
-        #region Daily
-
+        
         [Command("Daily")]
-        [Alias("add")]
         public async Task Daily(SocketUser socketUser = null)
         {
-            if (socketUser != null)
+            if (socketUser == null)
+            {
+                socketUser = Context.User;
+                var account = UserAccounts.GetAccount(socketUser);
+                account.XP += 200;
+                await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
+                UserAccounts.SaveAccounts();
+            }
+            else
             {
                 if (IsUserRoleHolder((SocketGuildUser)Context.User, TargetRole))
                 {
@@ -69,18 +156,8 @@ namespace Pokemon_discord.Modules
                     await Context.Channel.SendMessageAsync($"Mmm sorry {Context.User.Mention}, You need to be a {TargetRole} to be able to do so");
                 }
             }
-            else
-            {
-                socketUser = Context.User;
-                var account = UserAccounts.GetAccount(socketUser);
-                account.XP += 200;
-                await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
-                UserAccounts.SaveAccounts();
-            }
         }
-        #endregion
-
-        #region Pick
+        
         [Command("Pick")]
         public async Task PickOne([Remainder]string message)
         {
@@ -97,9 +174,7 @@ namespace Pokemon_discord.Modules
 
             await Context.Channel.SendMessageAsync("", false, embed);
         }
-        #endregion
-
-        #region Secret
+        
         [Command("secret")]
         public async Task RevealSecret([Remainder]string arguments = "") 
         {
@@ -130,9 +205,7 @@ namespace Pokemon_discord.Modules
 
             await dmChannel.SendMessageAsync("", false, embed);                     // Send embeed in DM
         }
-        #endregion
-
-        #region Data Adding
+        
         [Command("Add")]
         public async Task GetData([Remainder]string arguments)
         {
@@ -140,17 +213,13 @@ namespace Pokemon_discord.Modules
             DataStorage.SaveData();
             await Context.Channel.SendMessageAsync("DataStorage has " + DataStorage.pairs.Count + " pairs.");
         }
-        #endregion
-
-        #region Finding Data
+        
         [Command("Find")]
         public async Task FindData([Remainder]string key)
         {
             await Context.Channel.SendMessageAsync(DataStorage.pairs[key]);
         }
-        #endregion
-
-        #region Delete Data
+        
         [Command("Delete")]
         public async Task DeleteData([Remainder]string key = null)
         {
@@ -167,9 +236,6 @@ namespace Pokemon_discord.Modules
             await Context.Channel.SendMessageAsync("DataStorage has " + DataStorage.pairs.Count + " pairs.");
         }
 
-        #endregion
-
-        #region View all
         [Command("View")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task PrintData()
@@ -190,8 +256,6 @@ namespace Pokemon_discord.Modules
 
             await Context.Channel.SendMessageAsync("", false, embed);
         }
-
-        #endregion
 
 
         public bool IsUserRoleHolder(SocketGuildUser user, string targetRoleName) 
