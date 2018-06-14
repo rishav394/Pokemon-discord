@@ -24,6 +24,10 @@ namespace Pokemon_discord.Modules
                 {
                     ConvertedText += c;
                 }
+                if (char.IsWhiteSpace(c))
+                {
+                    ConvertedText += "  ";
+                }
             }
             await ReplyAsync(ConvertedText);
         }

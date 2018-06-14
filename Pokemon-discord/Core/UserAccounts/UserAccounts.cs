@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Discord.WebSocket;
 using System.Linq;
+using System;
 
 namespace Pokemon_discord.Core.UserAccounts
 {
@@ -48,6 +49,7 @@ namespace Pokemon_discord.Core.UserAccounts
         {
             var newAccount = new UserAccount
             {
+                Dt = DateTime.Now,
                 ID = id,
                 Size = 0,
                 XP = 100,

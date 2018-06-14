@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Net.Providers.WS4Net;
-
+using Pokemon_discord.Core;
 
 namespace Pokemon_discord
 {
@@ -24,6 +24,7 @@ namespace Pokemon_discord
                 WebSocketProvider = WS4NetProvider.Instance
             });
             _client.Log += Log;
+            _client.Ready += RepeatingTimer.StartTimer;
             await _client.LoginAsync(TokenType.Bot, Config.bot.token);
             await _client.StartAsync();
             _handler = new CommandHandler();

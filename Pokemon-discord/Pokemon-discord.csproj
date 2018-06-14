@@ -149,9 +149,11 @@
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Core\DataManager.cs" />
+    <Compile Include="Core\RepeatingTimer.cs" />
     <Compile Include="Core\UserAccounts\UserAccount.cs" />
     <Compile Include="Core\UserAccounts\UserAccounts.cs" />
     <Compile Include="DataStorage.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Modules\APIs.cs" />
     <Compile Include="Modules\DataManagement.cs" />
     <Compile Include="Modules\Emoji.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Modules\HelpModule.cs" />
     <Compile Include="Modules\Misc.cs" />
     <Compile Include="Modules\Image.cs" />
+    <Compile Include="Modules\ServerInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />
