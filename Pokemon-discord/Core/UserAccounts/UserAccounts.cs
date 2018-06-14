@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Discord.Webhook;
+﻿using System.Collections.Generic;
 using Discord.WebSocket;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pokemon_discord.Core.UserAccounts
 {
@@ -55,8 +51,8 @@ namespace Pokemon_discord.Core.UserAccounts
                 ID = id,
                 Size = 0,
                 XP = 100,
-                repper = new ulong[100],
-                countem = 0
+                RepperList = new List<ulong>(),
+                Countem = 0
             };
             accounts.Add(newAccount);
             SaveAccounts();

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pokemon_discord.Core.UserAccounts
 {
@@ -16,9 +13,9 @@ namespace Pokemon_discord.Core.UserAccounts
 
         public DateTime Dt { get; set; }
 
-        public ulong[] repper { get; set; }
+        public List<ulong> RepperList { get; set; }
 
-        public int countem { get; set; }
+        public int Countem { get; set; }
 
     }
 }

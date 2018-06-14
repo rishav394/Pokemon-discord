@@ -19,18 +19,40 @@ namespace Pokemon_discord.Modules
         private const string AbandonURL = "https://cdn.shopify.com/s/files/1/1024/7339/files/logoB_large.png?14615439934852209744";
         private readonly string TargetRole = "Moderator";
 
+        [Command("try")]
+        [Summary("Found out that we cant actuall store socketUser in json. Serialisation error")]
+        public async Task Tryg(SocketUser socketUser)
+        {
+            //
+            string json = JsonConvert.SerializeObject(socketUser, Formatting.Indented);
+            File.WriteAllText("bird.json", json);
+            //
+        }
+
         [Command("rep")]
-        public async Task repped(SocketUser socketUser)
+        public async Task Repped(SocketUser socketUser)
         {
             var account = UserAccounts.GetAccount(Context.User);
 
-            if (account.repper.Contains(socketUser.Id))
+            if (account.RepperList.Contains(socketUser.Id))
             {
                 await ReplyAsync("Hey Hey Hey you already did it once.");
+                var AllTheRepped = from a in Context.Guild.Users
+                                   where account.RepperList.Contains(a.Id)
+                                   select a;
+                var embed = new EmbedBuilder();
+                embed.WithTitle("You have repped all these lads so far");
+                int temp = 1;
+                foreach (var a in AllTheRepped)
+                {
+                    embed.AddField(temp++.ToString(), a.Username);
+                }
+                await ReplyAsync("", false, embed.Build());
             }
             else
             {
-                account.repper[account.countem++] = socketUser.Id;
+                account.RepperList.Add(socketUser.Id);
+                account.Countem++;
                 await ReplyAsync("Okay you +repped " + socketUser.Username);
             }
             UserAccounts.SaveAccounts();
@@ -79,13 +101,6 @@ namespace Pokemon_discord.Modules
             await ReplyAsync($"Gender : {middlename} and {pic}");
         }
         
-        [Command("help")]
-        public async Task DisplayListOfAllCommands([Remainder]string args = "")
-        {
-            var r = Context.Message.MentionedUsers.FirstOrDefault();
-           // await ReplyAsync("<@370963330782986250> mission short");
-        }
-        
         [Command("hello")]
         public async Task ImageShit([Remainder]string args = "")
         {
@@ -120,7 +135,6 @@ namespace Pokemon_discord.Modules
         }
         
         [Command("Stats")]
-        [Alias("status")]
         public async Task StatsOther(SocketUser socketUser = null)
         {
             if (socketUser == null)
