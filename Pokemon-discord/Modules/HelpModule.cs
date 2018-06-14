@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pokemon_discord
+namespace Pokemon_discord.Modules
 {
-    public class HelpModule : ModuleBase
+    public class HelpModule : ModuleBase<SocketCommandContext>
     {
         private readonly CommandService _commands;
         private readonly IServiceProvider _map;
