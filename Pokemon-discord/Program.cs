@@ -1,23 +1,25 @@
-﻿using Discord.WebSocket;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Net.Providers.WS4Net;
+using Discord.WebSocket;
 using Pokemon_discord.Core;
 
 namespace Pokemon_discord
 {
-    class Program
+    internal class Program
     {
-        DiscordSocketClient _client;
-        CommandHandler _handler;
+        private DiscordSocketClient _client;
+        private CommandHandler _handler;
 
-        static void Main(string[] args)
-            => new Program().StartAsync().GetAwaiter().GetResult();
-
-        public async Task StartAsync()
+        private static void Main(string[] args)
         {
-            if (Config.bot.token == "" || Config.bot.token == null) return;
+            new Program().StartAsync().GetAwaiter().GetResult();
+        }
+
+        private async Task StartAsync()
+        {
+            if (string.IsNullOrEmpty(Config.Bot.Token)) return;
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose,
@@ -25,7 +27,7 @@ namespace Pokemon_discord
             });
             _client.Log += Log;
             _client.Ready += RepeatingTimer.StartTimer;
-            await _client.LoginAsync(TokenType.Bot, Config.bot.token);
+            await _client.LoginAsync(TokenType.Bot, Config.Bot.Token);
             await _client.StartAsync();
             _handler = new CommandHandler();
             await _handler.InitializeAsync(_client);

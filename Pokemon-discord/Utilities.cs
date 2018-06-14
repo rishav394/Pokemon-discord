@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Pokemon_discord
 {
-    class Utilities
+    internal class Utilities
     {
-        private static Dictionary<string, string> alerts;
+        private static readonly Dictionary<string, string> alerts;
 
         static Utilities()
         {
-            string json = File.ReadAllText("SystemLang/alerts.json");
+            var json = File.ReadAllText("SystemLang/alerts.json");
             alerts = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
 
@@ -27,14 +23,10 @@ namespace Pokemon_discord
         //    return "No key Found";
         //}
 
-        public static string Get_formatted_alret(string key,params object[] param) 
+        public static string Get_formatted_alret(string key, params object[] param)
         {
-            if (alerts.ContainsKey(key))
-            {
-                return String.Format(alerts[key], param);
-            }
+            if (alerts.ContainsKey(key)) return string.Format(alerts[key], param);
             return "No key Found";
         }
-
     }
 }

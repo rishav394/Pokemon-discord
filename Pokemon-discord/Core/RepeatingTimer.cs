@@ -1,23 +1,17 @@
-﻿using System.Timers;
+﻿using System;
 using System.Threading.Tasks;
-using System;
+using System.Timers;
 
 namespace Pokemon_discord.Core
 {
     public static class RepeatingTimer
     {
+        private static Timer _timer;
 
-        private static Timer timer;
         public static Task StartTimer()
         {
-            timer = new Timer()
-            {
-                Interval = 5000,
-                AutoReset = true,
-                Enabled = true
-            };
-
-            timer.Elapsed += OnTimerTicked;
+            _timer = new Timer {Interval = 5000, AutoReset = true, Enabled = true};
+            _timer.Elapsed += OnTimerTicked;
             return Task.CompletedTask;
         }
 

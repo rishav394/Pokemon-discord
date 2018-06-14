@@ -1,35 +1,26 @@
-﻿using Discord.Commands;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Discord.Commands;
 
 namespace Pokemon_discord.Modules
 {
-    public class Emoji : ModuleBase<SocketCommandContext> 
+    public class Emoji : ModuleBase<SocketCommandContext>
     {
         [Command("Emotify")]
-        [Alias("emoji","emotion")]
-        public async Task Emotify([Remainder]string args)
+        [Alias("emoji", "emotion")]
+        public async Task Emotify([Remainder] string args)
         {
-            string[] ConvertorArray = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+            string[] convertorArray = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
             args = args.ToLower();
-            string ConvertedText = "";
-            foreach (char c in args)
+            var convertedText = "";
+            foreach (var c in args)
             {
-                if (char.IsLetter(c))
-                    ConvertedText += $":regional_indicator_{c}:";
-                else if (char.IsDigit(c))
-                {
-                    ConvertedText += $":{ConvertorArray[(int)char.GetNumericValue(c)]}:";
-                }
-                else
-                {
-                    ConvertedText += c;
-                }
-                if (char.IsWhiteSpace(c))
-                {
-                    ConvertedText += "  ";
-                }
+                if (char.IsLetter(c)) convertedText += $":regional_indicator_{c}:";
+                else if (char.IsDigit(c)) convertedText += $":{convertorArray[(int) char.GetNumericValue(c)]}:";
+                else convertedText += c;
+                if (char.IsWhiteSpace(c)) convertedText += "  ";
             }
-            await ReplyAsync(ConvertedText);
+
+            await ReplyAsync(convertedText);
         }
     }
 }

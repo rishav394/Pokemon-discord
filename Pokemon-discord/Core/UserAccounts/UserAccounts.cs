@@ -1,48 +1,44 @@
-﻿using System.Collections.Generic;
-using Discord.WebSocket;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System;
+using Discord.WebSocket;
 
 namespace Pokemon_discord.Core.UserAccounts
 {
     public static class UserAccounts
     {
-        public static List<UserAccount> accounts = null;
-
+        public static List<UserAccount> Accounts;
         private static readonly string AccountsFile = "Resources/accounts.json";
 
         static UserAccounts()
         {
             if (DataManager.ExistsFile(AccountsFile))
             {
-                accounts = DataManager.GetUserAccounts(AccountsFile).ToList();
+                Accounts = DataManager.GetUserAccounts(AccountsFile).ToList();
             }
             else
             {
-                accounts = new List<UserAccount>();
+                Accounts = new List<UserAccount>();
                 SaveAccounts();
             }
         }
 
-        public static void SaveAccounts() => DataManager.SaveUserAccounts(accounts, AccountsFile);
+        public static void SaveAccounts()
+        {
+            DataManager.SaveUserAccounts(Accounts, AccountsFile);
+        }
 
         public static UserAccount GetAccount(SocketUser user)
         {
             return GetOrCreateUserAccount(user.Id);
         }
 
-        public static UserAccount GetOrCreateUserAccount(ulong ID)
+        public static UserAccount GetOrCreateUserAccount(ulong id)
         {
-            var result = from a in accounts
-                         where a.ID == ID
-                         select a;
-
-            var FoundAccount = result.FirstOrDefault();
-            if (FoundAccount == null)
-            {
-                FoundAccount = CreateUserAccount(ID);
-            }
-            return FoundAccount;
+            var result = from a in Accounts where a.Id == id select a;
+            var foundAccount = result.FirstOrDefault();
+            if (foundAccount == null) foundAccount = CreateUserAccount(id);
+            return foundAccount;
         }
 
         public static UserAccount CreateUserAccount(ulong id)
@@ -50,13 +46,13 @@ namespace Pokemon_discord.Core.UserAccounts
             var newAccount = new UserAccount
             {
                 Dt = DateTime.Now,
-                ID = id,
+                Id = id,
                 Size = 0,
-                XP = 100,
+                Xp = 100,
                 RepperList = new List<ulong>(),
                 Countem = 0
             };
-            accounts.Add(newAccount);
+            Accounts.Add(newAccount);
             SaveAccounts();
             return newAccount;
         }
