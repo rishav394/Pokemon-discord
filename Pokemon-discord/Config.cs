@@ -39,5 +39,6 @@ namespace Pokemon_discord
     {
         public string Token;
         public string CmdPrefix;
+        public string APIKey;
     }
 }

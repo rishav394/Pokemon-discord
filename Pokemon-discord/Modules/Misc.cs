@@ -16,27 +16,6 @@ namespace Pokemon_discord.Modules
 
         private const string ThumbnailUrl = "https://assets.pokemon.com/static2/_ui/img/global/three-characters.png";
 
-        [Command("asdf")]
-        public async Task Kasnaks(SocketUser socketUser)
-        {
-            await ReplyAsync($"socketuser: {socketUser.Id} and socketguilduser: {((SocketGuildUser) socketUser).Id}");
-        }
-
-        [Command("qwer")]
-        public async Task Kadcsdsnaks(SocketGuildUser socketGuildUser)
-        {
-            await ReplyAsync($"socketuser: {socketGuildUser.Id}  and socketguilduser: {socketGuildUser.Id}");
-        }
-
-        [Command("Try")]
-        [Summary("Found out that we cant actuall store socketUser in json. Serialisation error")]
-        public async Task TryGg(SocketUser socketUser)
-        {
-            //
-            var json = JsonConvert.SerializeObject(socketUser, Formatting.Indented);
-            File.WriteAllText("bird.json", json);
-            //
-        }
 
         [Command("Abandon ship")]
         public async Task ShutDown()

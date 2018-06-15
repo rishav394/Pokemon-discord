@@ -45,7 +45,7 @@ namespace Pokemon_discord.Core.UserAccounts
         {
             var newAccount = new UserAccount
             {
-                Dt = DateTime.Now,
+                Dt = DateTime.UtcNow,
                 Id = id,
                 Size = 0,
                 Xp = 100,

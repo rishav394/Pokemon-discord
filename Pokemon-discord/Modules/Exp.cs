@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -12,6 +13,11 @@ namespace Pokemon_discord.Modules
         [Command("rep")]
         public async Task Repped(SocketUser socketUser)
         {
+            if (socketUser == Context.User)
+            {
+                await ReplyAsync("Dude thats like looking in the mirror and jerkin off. FFS."); //Thanks L
+                return;
+            }
             var account = UserAccounts.GetAccount(Context.User);
             if (account.RepperList.Contains(socketUser.Id))
             {
@@ -19,8 +25,14 @@ namespace Pokemon_discord.Modules
                 var allTheRepped = from a in Context.Guild.Users where account.RepperList.Contains(a.Id) select a;
                 var embed = new EmbedBuilder();
                 embed.WithTitle("You have repped all these lads so far");
+                embed.WithThumbnailUrl("https://media1.tenor.com/images/b6dff5dd473c0b1b5f6ade724c9434ed/tenor.gif?itemid=4068088");
+                embed.WithCurrentTimestamp();
                 var temp = 1;
-                foreach (var a in allTheRepped) embed.AddField(temp++.ToString(), a.Username);
+                foreach (var a in allTheRepped)
+                {
+                    embed.Description += $"\n{temp++.ToString()}. {a.Username}";
+                }
+
                 await ReplyAsync("", false, embed.Build());
             }
             else
@@ -50,9 +62,18 @@ namespace Pokemon_discord.Modules
             {
                 socketUser = Context.User;
                 var account = UserAccounts.GetAccount(socketUser);
-                account.Xp += 200;
-                await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
-                UserAccounts.SaveAccounts();
+                if (DateTime.UtcNow - account.Dt > TimeSpan.FromDays(1))
+                {
+                    account.Xp += 200;
+                    account.Dt = DateTime.UtcNow;
+                    await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
+                    UserAccounts.SaveAccounts();
+                }
+                else
+                {
+                    await Context.Channel.SendMessageAsync($"There there you needy child. " +
+                        $"{(24 - (DateTime.UtcNow - account.Dt).TotalHours).ToString("N2")} Hours to go.");
+                }
             }
             else
             {

@@ -26,12 +26,18 @@ namespace Pokemon_discord
                 WebSocketProvider = WS4NetProvider.Instance
             });
             _client.Log += Log;
-            _client.Ready += RepeatingTimer.StartTimer;
+            _client.Ready += InformOppaiDev;
             await _client.LoginAsync(TokenType.Bot, Config.Bot.Token);
             await _client.StartAsync();
+            Global.Client = _client;
             _handler = new CommandHandler();
             await _handler.InitializeAsync(_client);
             await Task.Delay(-1);
+        }
+
+        private async Task InformOppaiDev()
+        {
+            await _client.GetGuild(437628145042980875).GetTextChannel(437635106887172098).SendMessageAsync($"I was brought online at {DateTime.UtcNow}");
         }
 
         private async Task Log(LogMessage msg)
@@ -39,4 +45,5 @@ namespace Pokemon_discord
             Console.WriteLine(msg.Message);
         }
     }
+
 }

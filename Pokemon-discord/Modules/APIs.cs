@@ -1,13 +1,29 @@
-﻿using System.Net;
+﻿using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using Newtonsoft.Json;
 
 namespace Pokemon_discord.Modules
 {
     public class ApIs : ModuleBase<SocketCommandContext>
     {
+        [Command("Tenor")]
+        public async Task GetTenor([Remainder] string args)
+        {
+            Random Rand = new Random();
+            var embed = new EmbedBuilder();
+            embed.WithImageUrl(TenorAPI.TinyUrl(args));
+            embed.WithColor(new Color(Rand.Next(0, 256), Rand.Next(0, 256), Rand.Next(0, 256)));
+            embed.WithFooter($"Requested by {Context.User.Username}");
+            await ReplyAsync("", false, embed.Build());
+        }
+
+
+
         [Command("Yify")]
         public async Task GetYify([Remainder] string args = "")
         {
