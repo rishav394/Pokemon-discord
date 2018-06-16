@@ -1,21 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using Newtonsoft.Json;
 
 namespace Pokemon_discord.Modules
 {
     public class ApIs : ModuleBase<SocketCommandContext>
     {
-
         [Command("Yify")]
         public async Task GetYify([Remainder] string args = "")
         {
-            var json = "";
+            string json;
             using (var client = new WebClient())
             {
                 json = client.DownloadString("https://yts.am/api/v2/list_movies.json?quality=3D");
@@ -40,7 +36,7 @@ namespace Pokemon_discord.Modules
         [Command("Person")]
         public async Task GetRandom([Remainder] string args = "")
         {
-            var json = "";
+            string json;
             using (var client = new WebClient())
             {
                 json = client.DownloadString("https://randomuser.me/api/?gender=male&nat=ru");
@@ -50,7 +46,7 @@ namespace Pokemon_discord.Modules
             string gender = dataObject.results[0].gender.ToString();
             string middlename = dataObject.results[0].name.first.ToString();
             string pic = dataObject.results[0].picture.large.ToString();
-            await ReplyAsync($"Gender : {middlename} and {pic}");
+            await ReplyAsync($"Gender :{gender} & {middlename} and {pic}");
         }
     }
 }

@@ -31,52 +31,52 @@ namespace Pokemon_discord.Modules
             await Context.Channel.SendMessageAsync("", false, embed.Build());
         }
 
-        public int ChannelCount(SocketGuild socketGuild)
+        private int ChannelCount(SocketGuild socketGuild)
         {
             return socketGuild.Channels.Count;
         }
 
-        public int VoiceChannelCount(SocketGuild socketGuild)
+        private int VoiceChannelCount(SocketGuild socketGuild)
         {
             return socketGuild.VoiceChannels.Count;
         }
 
-        public int TextChannelCount(SocketGuild socketGuild)
+        private int TextChannelCount(SocketGuild socketGuild)
         {
             return socketGuild.TextChannels.Count;
         }
 
-        public string GuildOwner(SocketGuild socketGuild)
+        private string GuildOwner(SocketGuild socketGuild)
         {
             return socketGuild.Owner.ToString();
         }
 
-        public DateTime GuildCreatedDate(SocketGuild socketGuild)
+        private DateTime GuildCreatedDate(SocketGuild socketGuild)
         {
             return socketGuild.CreatedAt.UtcDateTime;
         }
 
-        public int RoleCount(SocketGuild socketGuild)
+        private int RoleCount(SocketGuild socketGuild)
         {
             return socketGuild.Roles.Count;
         }
 
-        public int GuildUserCount(SocketGuild socketGuild)
+        private int GuildUserCount(SocketGuild socketGuild)
         {
             return socketGuild.Users.Count;
         }
 
-        public int GuildBotCount(SocketGuild socketGuild)
+        private int GuildBotCount(SocketGuild socketGuild)
         {
             return (from a in socketGuild.Users where a.IsBot select a).Count();
         }
 
-        public int GuildHumanCount(SocketGuild socketGuild)
+        private int GuildHumanCount(SocketGuild socketGuild)
         {
             return GuildUserCount(socketGuild) - GuildBotCount(socketGuild);
         }
 
-        public string GuildLogo(SocketGuild socketGuild)
+        private string GuildLogo(SocketGuild socketGuild)
         {
             return socketGuild.IconUrl;
         }

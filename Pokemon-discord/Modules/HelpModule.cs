@@ -28,12 +28,12 @@ namespace Pokemon_discord.Modules
             if (path == "")
             {
                 output.Title = "Pokemon - help";
-                foreach (var mod in _commands.Modules.Where(m => m.Parent == null)) AddHelp(mod, ref output);
+                foreach (ModuleInfo mod in _commands.Modules.Where(m => m.Parent == null)) AddHelp(mod, ref output);
                 output.Footer = new EmbedFooterBuilder {Text = "Use 'help <module>' to get help with a module."};
             }
             else
             {
-                var mod = _commands.Modules.FirstOrDefault(
+                ModuleInfo mod = _commands.Modules.FirstOrDefault(
                     m => m.Name.Replace("Module", "").ToLower() == path.ToLower());
                 if (mod == null)
                 {
@@ -56,7 +56,7 @@ namespace Pokemon_discord.Modules
 
         public void AddHelp(ModuleInfo module, ref EmbedBuilder builder)
         {
-            foreach (var sub in module.Submodules) AddHelp(sub, ref builder);
+            foreach (ModuleInfo sub in module.Submodules) AddHelp(sub, ref builder);
             builder.AddField(f =>
             {
                 f.Name = $"**{module.Name.ToString()}**";
@@ -67,7 +67,7 @@ namespace Pokemon_discord.Modules
 
         public void AddCommands(ModuleInfo module, ref EmbedBuilder builder)
         {
-            foreach (var command in module.Commands)
+            foreach (CommandInfo command in module.Commands)
             {
                 command.CheckPreconditionsAsync(Context, _map).GetAwaiter().GetResult();
                 AddCommand(command, ref builder);
@@ -91,21 +91,18 @@ namespace Pokemon_discord.Modules
         {
             var output = new StringBuilder();
             if (!command.Parameters.Any()) return output.ToString();
-            foreach (var param in command.Parameters)
+            foreach (ParameterInfo param in command.Parameters)
                 if (param.IsOptional)
                     output.Append($"[{param.Name} = {param.DefaultValue}] ");
-                else if (param.IsMultiple)
-                    output.Append($"|{param.Name}| ");
-                else if (param.IsRemainder)
-                    output.Append($"...{param.Name} ");
-                else
-                    output.Append($"<{param.Name}> ");
+                else if (param.IsMultiple) output.Append($"|{param.Name}| ");
+                else if (param.IsRemainder) output.Append($"...{param.Name} ");
+                else output.Append($"<{param.Name}> ");
             return output.ToString();
         }
 
         public string GetPrefix(CommandInfo command)
         {
-            var output = GetPrefix(command.Module);
+            string output = GetPrefix(command.Module);
             output += $"{command.Aliases.FirstOrDefault()} ";
             return output;
         }
@@ -114,8 +111,7 @@ namespace Pokemon_discord.Modules
         {
             var output = "";
             if (module.Parent != null) output = $"{GetPrefix(module.Parent)}{output}";
-            if (module.Aliases.Any())
-                output += string.Concat(module.Aliases.FirstOrDefault(), " ");
+            if (module.Aliases.Any()) output += string.Concat(module.Aliases.FirstOrDefault(), " ");
             return output;
         }
     }

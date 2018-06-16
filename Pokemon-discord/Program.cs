@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
-using Pokemon_discord.Core;
 
 namespace Pokemon_discord
 {
@@ -12,7 +11,7 @@ namespace Pokemon_discord
         private DiscordSocketClient _client;
         private CommandHandler _handler;
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             new Program().StartAsync().GetAwaiter().GetResult();
         }
@@ -42,7 +41,7 @@ namespace Pokemon_discord
 
         private async Task Log(LogMessage msg)
         {
-            Console.WriteLine(msg.Message);
+            Console.WriteLine(DateTime.Now.ToString("h:mm:ss tt") + " : " + msg.Message);
         }
     }
 

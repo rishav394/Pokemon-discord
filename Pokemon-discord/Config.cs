@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.IO;
 
 
 namespace Pokemon_discord
 {
-    class Config
+    internal class Config
     {
         private const string ConfigFolder = "Resources";
         private const string ConfigFile = "config.json";
@@ -39,6 +34,6 @@ namespace Pokemon_discord
     {
         public string Token;
         public string CmdPrefix;
-        public string APIKey;
+        public string ApiKey;
     }
 }
