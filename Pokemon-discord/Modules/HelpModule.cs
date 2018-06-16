@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
+//Forked directly from https://github.com/LuciiferSK/Luciibot
+
 namespace Pokemon_discord.Modules
 {
     public class HelpModule : ModuleBase<SocketCommandContext>

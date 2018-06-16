@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pokemon_discord.Modules
 {
@@ -16,18 +12,31 @@ namespace Pokemon_discord.Modules
         public static string TinyUrl(string query)
         {
             var DataObject = BaseJob(query);
-            if (DataObject.next == 0)
+            if (DataObject.next < 1)
             {
                 DataObject = BaseJob("Not Found");
             }
             Random r = new Random();
-            int rdm = r.Next(Int32.Parse(DataObject.next.ToString()));
+            int rdm = r.Next(DataObject.results.Count);
             return DataObject.results[rdm].media[0].tinygif.url;
+        }
+
+
+        internal static string BigUrl(string query)
+        {
+            var DataObject = BaseJob(query);
+            if (DataObject.next < 1)
+            {
+                DataObject = BaseJob("Not Found");
+            }
+            Random r = new Random();
+            int rdm = r.Next(DataObject.results.Count);
+            return DataObject.results[rdm].media[0].gif.url;
         }
 
         private static dynamic BaseJob(string query)
         {
-            string SearchUrl = $"{_endpoint}+KEY={APIKey}&q={query}";
+            string SearchUrl = $"{_endpoint}KEY={APIKey}&q={query}";
 
             var json = "";
             using (var client = new WebClient())
@@ -37,5 +46,6 @@ namespace Pokemon_discord.Modules
 
             return JsonConvert.DeserializeObject<dynamic>(json);
         }
+
     }
 }

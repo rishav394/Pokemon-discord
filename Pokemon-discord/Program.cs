@@ -37,7 +37,7 @@ namespace Pokemon_discord
 
         private async Task InformOppaiDev()
         {
-            await _client.GetGuild(437628145042980875).GetTextChannel(437635106887172098).SendMessageAsync($"I was brought online at {DateTime.UtcNow}");
+            await _client.GetGuild(437628145042980875).GetTextChannel(437635106887172098).SendMessageAsync($"I was brought online at {DateTime.Now}");
         }
 
         private async Task Log(LogMessage msg)

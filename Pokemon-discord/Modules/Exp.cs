@@ -45,6 +45,24 @@ namespace Pokemon_discord.Modules
             UserAccounts.SaveAccounts();
         }
 
+        [Command("Rep")]
+        public async Task Repped()
+        {
+            var account = UserAccounts.GetAccount(Context.User);
+            var allTheRepped = from a in Context.Guild.Users where account.RepperList.Contains(a.Id) select a;
+            var embed = new EmbedBuilder();
+            embed.WithTitle("You have repped all these lads so far");
+            embed.WithThumbnailUrl("https://media1.tenor.com/images/b6dff5dd473c0b1b5f6ade724c9434ed/tenor.gif?itemid=4068088");
+            embed.WithCurrentTimestamp();
+            var temp = 1;
+            foreach (var a in allTheRepped)
+            {
+                embed.Description += $"\n{temp++.ToString()}. {a.Username}";
+            }
+
+            await ReplyAsync("", false, embed.Build());
+        }
+
         [Command("Stats")]
         public async Task StatsOther(SocketUser socketUser = null)
         {

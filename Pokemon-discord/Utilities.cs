@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Pokemon_discord
 {
-    internal class Utilities
+    class Utilities
     {
         private static readonly Dictionary<string, string> alerts;
 

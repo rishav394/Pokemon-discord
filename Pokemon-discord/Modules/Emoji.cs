@@ -7,7 +7,7 @@ namespace Pokemon_discord.Modules
     public class Emoji : ModuleBase<SocketCommandContext>
     {
         [Command("Emotify")]
-        [Alias("emoji", "emotion")]
+        [Alias("emoji", "emotion" , "say")]
         public async Task Emotify([Remainder] string args)
         {
             string[] convertorArray = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
