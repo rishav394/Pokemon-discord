@@ -2,7 +2,7 @@
 using Discord;
 using Discord.WebSocket;
 
-namespace Pokemon_discord.Modules
+namespace Pokemon_discord.ModuleHelper
 {
     internal class PermissionHelper
     {

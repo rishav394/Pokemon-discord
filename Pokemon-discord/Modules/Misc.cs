@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Pokemon_discord.ModuleHelper;
 
 namespace Pokemon_discord.Modules
 {
@@ -13,6 +14,7 @@ namespace Pokemon_discord.Modules
 
         private const string ThumbnailUrl = "https://assets.pokemon.com/static2/_ui/img/global/three-characters.png";
 
+       
         [Command("Abandon ship")]
         [Alias("kill", "die", "down", "911")]
         public async Task ShutDown()

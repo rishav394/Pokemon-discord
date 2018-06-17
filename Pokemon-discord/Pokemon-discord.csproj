@@ -161,9 +161,11 @@
     <Compile Include="Modules\Misc.cs" />
     <Compile Include="Modules\Image.cs" />
     <Compile Include="Modules\Moderation.cs" />
-    <Compile Include="Modules\PermissionHelper.cs" />
+    <Compile Include="ModuleHelper\PermissionHelper.cs" />
     <Compile Include="Modules\ServerInfo.cs" />
-    <Compile Include="Modules\TenorAPI.cs" />
+    <Compile Include="ModuleHelper\TenorAPI.cs" />
+    <Compile Include="ModuleHelper\TranslatorAPI.cs" />
+    <Compile Include="Modules\Translate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />

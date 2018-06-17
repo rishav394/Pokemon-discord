@@ -28,6 +28,7 @@ namespace Pokemon_discord
             _client.Ready += InformOppaiDev;
             await _client.LoginAsync(TokenType.Bot, Config.Bot.Token);
             await _client.StartAsync();
+            await _client.SetGameAsync("`@pokemon help` for help");
             Global.Client = _client;
             _handler = new CommandHandler();
             await _handler.InitializeAsync(_client);

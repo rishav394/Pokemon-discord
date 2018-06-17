@@ -12,7 +12,7 @@ namespace Pokemon_discord.Modules
         [Command("purge")]
         [Alias("prune", "clear")]
         [Summary("Deletes the specified amount of messages.")]
-        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
         public async Task PurgeChat(int amount)
         {

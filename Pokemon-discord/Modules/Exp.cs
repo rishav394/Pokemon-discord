@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Pokemon_discord.Core.UserAccounts;
+using Pokemon_discord.ModuleHelper;
 
 namespace Pokemon_discord.Modules
 {

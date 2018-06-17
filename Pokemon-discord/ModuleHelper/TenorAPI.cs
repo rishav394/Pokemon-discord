@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net;
+using Newtonsoft.Json;
 
-namespace Pokemon_discord.Modules
+namespace Pokemon_discord.ModuleHelper
 {
     internal class TenorApi
     {
-        private static readonly string ApiKey = Config.Bot.ApiKey;
-        private static readonly string _endpoint = "https://api.tenor.com/v1/search?";
+        private static readonly string ApiKey = Config.Bot.TenorApiKey;
+        private static readonly string Endpoint = "https://api.tenor.com/v1/search?";
 
         public static string TinyUrl(string query)
         {
@@ -36,7 +36,7 @@ namespace Pokemon_discord.Modules
 
         private static dynamic BaseJob(string query)
         {
-            string searchUrl = $"{_endpoint}KEY={ApiKey}&q={query}";
+            string searchUrl = $"{Endpoint}KEY={ApiKey}&q={query}";
 
             string json;
             using (var client = new WebClient())
