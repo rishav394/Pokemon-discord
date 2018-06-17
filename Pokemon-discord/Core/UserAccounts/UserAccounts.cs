@@ -34,8 +34,8 @@ namespace Pokemon_discord.Core.UserAccounts
 
         public static UserAccount GetOrCreateUserAccount(ulong id)
         {
-            var result = from a in Accounts where a.Id == id select a;
-            var foundAccount = result.FirstOrDefault();
+            IEnumerable<UserAccount> result = from a in Accounts where a.Id == id select a;
+            UserAccount foundAccount = result.FirstOrDefault();
             if (foundAccount == null) foundAccount = CreateUserAccount(id);
             return foundAccount;
         }
@@ -48,7 +48,8 @@ namespace Pokemon_discord.Core.UserAccounts
                 Size = 0,
                 Xp = 100,
                 RepperList = new List<ulong>(),
-                Countem = 0
+                Countem = 0,
+                WarningCount = 0
             };
             Accounts.Add(newAccount);
             SaveAccounts();

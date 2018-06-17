@@ -25,16 +25,13 @@ namespace Pokemon_discord
             if (!(s is SocketUserMessage msg)) return;
             var context = new SocketCommandContext(_client, msg);
             var argPos = 0;
-
             if (s.Content.Contains("you finished your digging! Use"))
-                await _client.GetGuild(437628145042980875)
-                    .GetTextChannel(437635106887172098)
+                await _client.GetGuild(437628145042980875).GetTextChannel(437635106887172098)
                     .SendMessageAsync($"<@334750493085794304>, someone just finished digging. Fuck em hard.");
-
-            if (s.Content.Contains("┬─┬ ノ( ゜-゜ノ)"))
+            if (s.Content.Contains("(╯°□°）╯︵ ┻━┻"))
             {
                 await context.Channel.SendMessageAsync("Not Happenin dude.");
-                await context.Channel.SendMessageAsync("(╯°□°）╯︵ ┻━┻");
+                await context.Channel.SendMessageAsync("┬─┬ ノ( ゜-゜ノ)");
             }
 
             if (msg.HasStringPrefix(Config.Bot.CmdPrefix, ref argPos) ||

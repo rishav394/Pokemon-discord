@@ -160,6 +160,8 @@
     <Compile Include="Modules\HelpModule.cs" />
     <Compile Include="Modules\Misc.cs" />
     <Compile Include="Modules\Image.cs" />
+    <Compile Include="Modules\Moderation.cs" />
+    <Compile Include="Modules\PermissionHelper.cs" />
     <Compile Include="Modules\ServerInfo.cs" />
     <Compile Include="Modules\TenorAPI.cs" />
     <Compile Include="Program.cs" />

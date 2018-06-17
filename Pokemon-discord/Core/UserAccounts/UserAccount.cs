@@ -11,5 +11,6 @@ namespace Pokemon_discord.Core.UserAccounts
         public DateTime Dt { get; set; }                //A date time variale for Daily handling
         public List<ulong> RepperList { get; set; }     //Who all have u repped so far
         public int Countem { get; set; }                //How many times did u rep someone
+        public int WarningCount { get; set;  }
     }
 }
