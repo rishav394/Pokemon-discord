@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Pokemon_discord.Core.UserAccounts;
 
 namespace Pokemon_discord
 {
@@ -25,16 +26,26 @@ namespace Pokemon_discord
             if (!(s is SocketUserMessage msg)) return;
             var context = new SocketCommandContext(_client, msg);
             var argPos = 0;
-            if (s.Content.Contains("you finished your digging! Use"))
-                await _client.GetGuild(437628145042980875).GetTextChannel(437635106887172098)
-                    .SendMessageAsync($"<@334750493085794304>, someone just finished digging. Fuck em hard.");
+
             if (s.Content.Contains("(╯°□°）╯︵ ┻━┻"))
             {
                 await context.Channel.SendMessageAsync("Not Happenin dude.");
                 await context.Channel.SendMessageAsync("┬─┬ ノ( ゜-゜ノ)");
             }
 
-            if (msg.HasStringPrefix(Config.Bot.CmdPrefix, ref argPos) ||
+            if (CheckIfMuted(context.User))
+            {
+                await context.Message.DeleteAsync();
+                return;
+            }
+
+            if (!Config.Bot.PrefixDictionary.ContainsKey(context.Guild.Id))
+            {
+                Config.Bot.PrefixDictionary.Add(context.Guild.Id, "~");
+                Config.SavePrefix();
+            } 
+
+            if (msg.HasStringPrefix(Config.Bot.PrefixDictionary[context.Guild.Id], ref argPos) ||
                 msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
                 IResult result = await _service.ExecuteAsync(context, argPos);
@@ -50,6 +61,16 @@ namespace Pokemon_discord
                     await context.Channel.SendMessageAsync("", false, embed.Build());
                 }
             }
+        }
+
+        private bool CheckIfMuted(SocketUser contextUser)
+        {
+            if (!UserAccounts.AccountExists(contextUser))
+            {
+                return false;
+            }
+            UserAccount account = UserAccounts.GetAccount(contextUser);
+            return account.DateTimeDictionary[((SocketGuildUser)contextUser).Guild.Id] > DateTime.Now;
         }
     }
 }

@@ -44,7 +44,9 @@ namespace Pokemon_discord.Modules
                 output.Title = mod.Name;
                 output.Description = $"{mod.Summary}\n" +
                                      (!string.IsNullOrEmpty(mod.Remarks) ? $"({mod.Remarks})\n" : "") +
-                                     (mod.Aliases.Any() ? $"Prefix(es): {string.Join(",", mod.Aliases)}\n" : "") +
+                                     (mod.Aliases.Any() ? "" +
+                                                          "Prefix" +
+                                                          $"(es): {string.Join(",", mod.Aliases)}\n" : "") +
                                      (mod.Submodules.Any()
                                          ? $"Submodules: {mod.Submodules.Select(m => m.Name.ToString())}\n"
                                          : "") + " ";

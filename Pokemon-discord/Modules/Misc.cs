@@ -14,18 +14,23 @@ namespace Pokemon_discord.Modules
 
         private const string ThumbnailUrl = "https://assets.pokemon.com/static2/_ui/img/global/three-characters.png";
 
-       
+
+        /// <summary>
+        /// Not a Public command. 
+        /// </summary>
+        /// <returns></returns>
         [Command("Abandon ship")]
         [Alias("kill", "die", "down", "911")]
         public async Task ShutDown()
         {
-            Embed embed = new EmbedBuilder().WithColor(Color.Blue).WithTitle("Wait What????")
-                .WithDescription(Utilities.Get_formatted_alret("ABANDON")).WithThumbnailUrl(AbandonUrl).Build();
-            await Context.Channel.SendMessageAsync("", false, embed);
-            IDMChannel dmChannel = await Context.User.GetOrCreateDMChannelAsync();
-            await dmChannel.SendMessageAsync("Shutdown complete.");
-            await dmChannel.SendMessageAsync("`Environment.Exit(1)`");
-            Environment.Exit(1);
+            await ReplyAsync("Sorry command available only to the Code owner.");
+            //Embed embed = new EmbedBuilder().WithColor(Color.Blue).WithTitle("Wait What????")
+            //    .WithDescription(Utilities.Get_formatted_alret("ABANDON")).WithThumbnailUrl(AbandonUrl).Build();
+            //await Context.Channel.SendMessageAsync("", false, embed);
+            //IDMChannel dmChannel = await Context.User.GetOrCreateDMChannelAsync();
+            //await dmChannel.SendMessageAsync("Shutdown complete.");
+            //await dmChannel.SendMessageAsync("`Environment.Exit(1)`");
+            //Environment.Exit(1);
         }
 
         [Command("Pick")]

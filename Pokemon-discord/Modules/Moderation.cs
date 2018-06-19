@@ -1,14 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Pokemon_discord.Core.UserAccounts;
+using Pokemon_discord.ModuleHelper;
 
 namespace Pokemon_discord.Modules
 {
     public class Moderation : ModuleBase<SocketCommandContext>
     {
+        [Command("Mute")]
+        [Summary("Ask a noob to shadafakup")]
+        [RequireBotPermission(GuildPermission.ManageMessages)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        public async Task MuteTask(SocketUser socketUser, int timeInSeconds)
+        {
+            if (socketUser == Context.Guild.GetUser(454001308555280418))
+            {
+                await ReplyAsync("Not happening kiddo.");
+                return;
+            }
+            var account = UserAccounts.GetAccount(socketUser);
+            account.DateTimeDictionary[Context.Guild.Id] = DateTime.Now.Add(TimeSpan.FromSeconds(timeInSeconds));
+            UserAccounts.SaveAccounts();
+            await ReplyAsync("aight muted");
+        }
+
+
+
         [Command("purge")]
         [Alias("prune", "clear")]
         [Summary("Deletes the specified amount of messages.")]
@@ -26,7 +47,7 @@ namespace Pokemon_discord.Modules
 
         [Command("Ban")]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireUserPermission(GuildPermission.BanMembers)]
         public async Task BanTask(SocketGuildUser socketGuildUser, int days = 0,
             [Remainder] string reason = "No reason")
         {
@@ -36,9 +57,9 @@ namespace Pokemon_discord.Modules
                 return;
             }
 
+            await Context.Guild.AddBanAsync(socketGuildUser, days, reason);
             string printableDays = days == 0 ? "Infinite" : days.ToString();
             await ReplyAsync($"{socketGuildUser.Mention} was banned for {reason} for {printableDays} days.");
-            await Context.Guild.AddBanAsync(socketGuildUser, days, reason);
         }
 
         [Command("kick")]
@@ -52,8 +73,8 @@ namespace Pokemon_discord.Modules
                 return;
             }
 
-            await ReplyAsync($"{socketGuildUser.Mention} was kicked for {reason}.");
             await socketGuildUser.KickAsync(reason);
+            await ReplyAsync($"{socketGuildUser.Mention} was kicked for {reason}.");
         }
 
         [Command("warn")]
@@ -70,6 +91,9 @@ namespace Pokemon_discord.Modules
             account.WarningCount++;
             await ReplyAsync($"All right {socketGuildUser.Mention} was warned for {reason}.");
             await ReplyAsync($"Total no of warnings = {account.WarningCount}");
+            if (account.WarningCount == 2)
+                await ReplyAsync(
+                    $"Now is the time. Beg, beg for a `{Config.Bot.PrefixDictionary[Context.Guild.Id]}Reset Warning`.");
             if (account.WarningCount >= 3)
             {
                 account.WarningCount = 0;
@@ -80,7 +104,7 @@ namespace Pokemon_discord.Modules
         }
 
         [Command("Reset Warning")]
-        [Alias("resetw")]
+        [Alias("resetw", "Reset_Warning", "Reset_warnings", "reset warnings")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ReserWarnignTask(SocketGuildUser socketGuildUser)
         {
@@ -103,6 +127,29 @@ namespace Pokemon_discord.Modules
             embedBuilder.WithTitle($"{iGuildUser.Username}'s permissions");
             embedBuilder.WithFooter($"Requested by {Context.User.Username}");
             await ReplyAsync("", false, embedBuilder.Build());
+        }
+
+        [Command("prefix")]
+        public async Task PrefiTask([Remainder]string newPrefix = null)
+        {
+            if (string.IsNullOrEmpty(newPrefix))
+            {
+                await ReplyAsync($"My current prefix is `{Config.Bot.PrefixDictionary[Context.Guild.Id]}` |" +
+                                 $" Use `{Config.Bot.PrefixDictionary[Context.Guild.Id]}help` for help");
+            }
+            else
+            {
+                if (!PermissionHelper.HasPermission((SocketGuildUser) Context.User, GuildPermission.Administrator))
+                {
+                    await ReplyAsync($"You need to be an Administrator to make a change to prefix.");
+                    return;
+                }
+
+                Config.Bot.PrefixDictionary[Context.Guild.Id] = newPrefix;
+                Config.SavePrefix();
+                await ReplyAsync(
+                    $"Aight my prefix has been changed to `{Config.Bot.PrefixDictionary[Context.Guild.Id]}`. You can always mention me though.");
+            }
         }
     }
 }

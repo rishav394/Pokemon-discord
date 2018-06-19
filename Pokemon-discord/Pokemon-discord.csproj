@@ -174,7 +174,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Resources\config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="SystemLang\alerts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

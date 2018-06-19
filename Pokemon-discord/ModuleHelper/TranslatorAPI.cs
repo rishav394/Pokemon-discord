@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Text;
-using Discord.Commands;
 using Newtonsoft.Json;
 
 namespace Pokemon_discord.ModuleHelper
@@ -12,7 +10,7 @@ namespace Pokemon_discord.ModuleHelper
 
         private static readonly string ApiKey = Config.Bot.TranslateApiKey;
         private static readonly string Endpoint = "https://translate.yandex.net/api/v1.5/tr.json/";
-        public static readonly Dictionary<string, string> _dictionary = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> Dictionary = new Dictionary<string, string>
             {
                 {"af", "Afrikaans"},
                 {"am", "Amharic"},
@@ -124,16 +122,16 @@ namespace Pokemon_discord.ModuleHelper
 
             if (dataObject.code.ToString() != "200")
             {
-                return new string[] {$"Failed to translate. Error code {dataObject.code}"};
+                return new[] {$"Failed to translate. Error code {dataObject.code}"};
             }
 
-            string translatedFrom = _dictionary[(string)dataObject.lang.ToString().Split('-')[0]];
-            string translatedTo = _dictionary[(string)dataObject.lang.ToString().Split('-')[1]];
+            string translatedFrom = Dictionary[(string)dataObject.lang.ToString().Split('-')[0]];
+            string translatedTo = Dictionary[(string)dataObject.lang.ToString().Split('-')[1]];
 
 
             string translatedText = dataObject.text[0].ToString();
 
-            return new string[] {translatedFrom, translatedTo, translatedText};
+            return new[] {translatedFrom, translatedTo, translatedText};
 
         }
 
@@ -161,7 +159,7 @@ namespace Pokemon_discord.ModuleHelper
                 return "Not Found";
             }
             
-            return _dictionary[shortForm];
+            return Dictionary[shortForm];
         }
 
         

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -73,27 +74,29 @@ namespace Pokemon_discord.Modules
 
         [Command("Daily")]
         public async Task Daily(SocketUser socketUser = null)
-        {
-            var targetRole = "Moderator";
+        { 
             if (socketUser == null)
             {
                 socketUser = Context.User;
                 UserAccount account = UserAccounts.GetAccount(socketUser);
-                if (DateTime.UtcNow - account.Dt > TimeSpan.FromDays(1))
+                if (DateTime.UtcNow - account.DailyDateTime > TimeSpan.FromDays(1))
                 {
                     account.Xp += 200;
-                    account.Dt = DateTime.UtcNow;
+                    account.DailyDateTime = DateTime.UtcNow;
                     await Context.Channel.SendMessageAsync($"Hey {socketUser.Mention}, You gained 200 XP.");
                     UserAccounts.SaveAccounts();
                 }
                 else
                 {
                     await Context.Channel.SendMessageAsync($"There there you needy child. " +
-                                                           $"{(24 - (DateTime.UtcNow - account.Dt).TotalHours).ToString("N2")} Hours to go.");
+                                                           $"{(24 - (DateTime.UtcNow - account.DailyDateTime).TotalHours).ToString("N2")} Hours to go.");
                 }
             }
             else
             {
+                var targetRole = ((SocketGuildUser)socketUser).Guild.Roles.ToList().FirstOrDefault()?.ToString();
+
+                    
                 if (PermissionHelper.IsUserRoleHolder((SocketGuildUser) Context.User, targetRole))
                 {
                     UserAccount account = UserAccounts.GetAccount(socketUser);

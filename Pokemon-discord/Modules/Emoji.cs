@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord.Commands;
-using Discord.WebSocket;
 
 namespace Pokemon_discord.Modules
 {

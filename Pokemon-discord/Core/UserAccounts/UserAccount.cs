@@ -8,9 +8,10 @@ namespace Pokemon_discord.Core.UserAccounts
         public ulong Id { get; set; }                   //SocketUser.id
         public uint Size { get; set; }                  //Sandwhich Size
         public uint Xp { get; set; }                    //XP
-        public DateTime Dt { get; set; }                //A date time variale for Daily handling
+        public DateTime DailyDateTime { get; set; }     //A date time variale for Daily handling
         public List<ulong> RepperList { get; set; }     //Who all have u repped so far
         public int Countem { get; set; }                //How many times did u rep someone
-        public int WarningCount { get; set;  }
+        public int WarningCount { get; set; }
+        public Dictionary<ulong, DateTime> DateTimeDictionary { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.IO;
 
 
@@ -28,12 +29,18 @@ namespace Pokemon_discord
                 Bot = JsonConvert.DeserializeObject<BotConfig>(json);
             }
         }
+
+        public static void SavePrefix()
+        {
+            string json = JsonConvert.SerializeObject(Bot, Formatting.Indented);
+            File.WriteAllText(ConfigFolder + "/" + ConfigFile, json);
+        }
     }
 
     public struct BotConfig
     {
         public string Token;
-        public string CmdPrefix;
+        public Dictionary<ulong, string> PrefixDictionary;
         public string TenorApiKey;
         public string TranslateApiKey;
     }

@@ -10,7 +10,7 @@ namespace Pokemon_discord.Modules
     public class ServerInfo : ModuleBase<SocketCommandContext>
     {
         [Command("server")]
-        [Summary("Its all about the server bitch")]
+        [Summary("Its all about the server")]
         public async Task AllAboutServer()
         {
             var embed = new EmbedBuilder();
@@ -22,7 +22,8 @@ namespace Pokemon_discord.Modules
             embed.AddField("Text channels", TextChannelCount(Context.Guild), true);
             embed.AddField("Total Bots", GuildBotCount(Context.Guild), true);
             embed.AddField("Total Voice Channels", VoiceChannelCount(Context.Guild), true);
-            embed.AddField("Total Pirates", GuildHumanCount(Context.Guild));
+            embed.AddField("Total Pirates", GuildHumanCount(Context.Guild), true);
+            embed.AddField("Server Location", Context.Guild.VoiceRegionId, true);
             embed.WithThumbnailUrl(GuildLogo(Context.Guild));
             embed.WithCurrentTimestamp();
             embed.WithFooter($"Server name: {Context.Guild.Name} | Server ID: {Context.Guild.Id}",

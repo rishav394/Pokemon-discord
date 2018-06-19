@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Discord.WebSocket;
 
@@ -8,6 +9,7 @@ namespace Pokemon_discord.Core.UserAccounts
     {
         public static List<UserAccount> Accounts;
         private static readonly string AccountsFile = "Resources/accounts.json";
+        public static SocketUser su;
 
         static UserAccounts()
         {
@@ -29,7 +31,17 @@ namespace Pokemon_discord.Core.UserAccounts
 
         public static UserAccount GetAccount(SocketUser user)
         {
+            su = user;
             return GetOrCreateUserAccount(user.Id);
+        }
+
+        public static bool AccountExists(SocketUser user)
+        {
+            ulong id = user.Id;
+            IEnumerable<UserAccount> result = from a in Accounts where a.Id == id select a;
+            UserAccount foundAccount = result.FirstOrDefault();
+            if (foundAccount == null) return false;
+            return true;
         }
 
         public static UserAccount GetOrCreateUserAccount(ulong id)
@@ -49,7 +61,8 @@ namespace Pokemon_discord.Core.UserAccounts
                 Xp = 100,
                 RepperList = new List<ulong>(),
                 Countem = 0,
-                WarningCount = 0
+                WarningCount = 0,
+                DateTimeDictionary = new Dictionary<ulong, DateTime> {{((SocketGuildUser) su).Guild.Id, DateTime.Now}}
             };
             Accounts.Add(newAccount);
             SaveAccounts();
