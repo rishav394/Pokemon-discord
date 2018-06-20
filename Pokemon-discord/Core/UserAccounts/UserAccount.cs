@@ -12,6 +12,6 @@ namespace Pokemon_discord.Core.UserAccounts
         public List<ulong> RepperList { get; set; }     //Who all have u repped so far
         public int Countem { get; set; }                //How many times did u rep someone
         public int WarningCount { get; set; }
-        public Dictionary<ulong, DateTime> DateTimeDictionary { get; set; }
+        public Dictionary<ulong, DateTime> UnmuteDateTime { get; set; }
     }
 }

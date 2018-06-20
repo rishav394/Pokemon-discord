@@ -48,7 +48,17 @@ namespace Pokemon_discord.Core.UserAccounts
         {
             IEnumerable<UserAccount> result = from a in Accounts where a.Id == id select a;
             UserAccount foundAccount = result.FirstOrDefault();
-            if (foundAccount == null) foundAccount = CreateUserAccount(id);
+            if (foundAccount == null)
+            {
+                foundAccount = CreateUserAccount(id);
+            }
+            //else
+            //{
+            //    if (!foundAccount.UnmuteDateTime.ContainsKey(((SocketGuildUser)su).Guild.Id)) 
+            //        foundAccount.UnmuteDateTime.Add(((SocketGuildUser)su).Guild.Id, DateTime.MinValue);
+            //    SaveAccounts();
+            //}
+           
             return foundAccount;
         }
 
@@ -62,7 +72,7 @@ namespace Pokemon_discord.Core.UserAccounts
                 RepperList = new List<ulong>(),
                 Countem = 0,
                 WarningCount = 0,
-                DateTimeDictionary = new Dictionary<ulong, DateTime> {{((SocketGuildUser) su).Guild.Id, DateTime.Now}}
+                UnmuteDateTime = new Dictionary<ulong, DateTime> { { ((SocketGuildUser) su).Guild.Id, DateTime.Now } }
             };
             Accounts.Add(newAccount);
             SaveAccounts();

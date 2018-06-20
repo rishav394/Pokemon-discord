@@ -70,7 +70,9 @@ namespace Pokemon_discord
                 return false;
             }
             UserAccount account = UserAccounts.GetAccount(contextUser);
-            return account.DateTimeDictionary[((SocketGuildUser)contextUser).Guild.Id] > DateTime.Now;
+
+            return account.UnmuteDateTime.ContainsKey(((SocketGuildUser)contextUser).Guild.Id)
+                   && account.UnmuteDateTime[((SocketGuildUser)contextUser).Guild.Id] > DateTime.Now;
         }
     }
 }

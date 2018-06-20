@@ -12,6 +12,23 @@ namespace Pokemon_discord.Modules
     public class Moderation : ModuleBase<SocketCommandContext>
     {
         [Command("Mute")]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        public async Task MuteRealTask(SocketUser socketUser, double timeInMinutes)
+        {
+            if(PermissionHelper.HasPermission((SocketGuildUser) socketUser, GuildPermission.Administrator))
+            {
+                await ReplyAsync($"The force is stong with {socketUser.Username}. Administrators cant be muted.");
+                return;
+            }
+           // await Context.Guild.us
+
+
+        }
+
+
+        [Command("BadMute")]
+        [Remarks("Do not use this. This method should only be used when the bot doesnt haver permissions to manage roles.")]
         [Summary("Ask a noob to shadafakup")]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
@@ -22,8 +39,13 @@ namespace Pokemon_discord.Modules
                 await ReplyAsync("Not happening kiddo.");
                 return;
             }
+            if(PermissionHelper.HasPermission((SocketGuildUser) socketUser, GuildPermission.Administrator))
+            {
+                await ReplyAsync($"The force is stong with {socketUser.Username}. Administrators cant be muted.");
+                return;
+            }
             var account = UserAccounts.GetAccount(socketUser);
-            account.DateTimeDictionary[Context.Guild.Id] = DateTime.Now.Add(TimeSpan.FromSeconds(timeInSeconds));
+            account.UnmuteDateTime[Context.Guild.Id] = DateTime.Now.Add(TimeSpan.FromSeconds(timeInSeconds));
             UserAccounts.SaveAccounts();
             await ReplyAsync("aight muted");
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -14,9 +15,27 @@ namespace Pokemon_discord.Modules
 
         private const string ThumbnailUrl = "https://assets.pokemon.com/static2/_ui/img/global/three-characters.png";
 
+        
+
+
+        [Command("rps")]
+        public async Task RockPaperScissor(string rps = null)
+        {
+            if (string.IsNullOrEmpty(rps) || !(rps.Equals("rock") || rps.Equals("paper") || rps.Equals("scissor")))
+            {
+                await ReplyAsync("You do not have choosen one of the options Rock, Paper or scissor.");
+                return;
+            }
+
+            string botPick = new[] { "rock", "paper", "scissor" }[new Random().Next(0, 2)];
+            var winDictionary = new Dictionary<string, string> {{"rock", "scissor"}, {"paper", "rock"}, {"scissor", "paper"}};
+            if (botPick==rps) await ReplyAsync("Damn its a draw.");
+            else if (winDictionary[rps] == botPick) await ReplyAsync($"Ez win. Your Pick: {rps} bot pick: {botPick}");
+            else await ReplyAsync($"Bot cheated and won. Your Pick: {rps} bot pick: {botPick}");
+        }
 
         /// <summary>
-        /// Not a Public command. 
+        ///     Not a Public command.
         /// </summary>
         /// <returns></returns>
         [Command("Abandon ship")]

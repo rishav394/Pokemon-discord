@@ -20,6 +20,7 @@ namespace Pokemon_discord
             if (!File.Exists(ConfigFolder + "/" + ConfigFile))
             {
                 Bot = new BotConfig();
+                Bot.PrefixDictionary=new Dictionary<ulong, string>();
                 string json = JsonConvert.SerializeObject(Bot, Formatting.Indented);
                 File.WriteAllText(ConfigFolder + "/" + ConfigFile, json);
             }
