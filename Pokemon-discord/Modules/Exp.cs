@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -74,7 +73,7 @@ namespace Pokemon_discord.Modules
 
         [Command("Daily")]
         public async Task Daily(SocketUser socketUser = null)
-        { 
+        {
             if (socketUser == null)
             {
                 socketUser = Context.User;
@@ -94,9 +93,7 @@ namespace Pokemon_discord.Modules
             }
             else
             {
-                var targetRole = ((SocketGuildUser)socketUser).Guild.Roles.ToList().FirstOrDefault()?.ToString();
-
-                    
+                string targetRole = ((SocketGuildUser) socketUser).Guild.Roles.ToList().FirstOrDefault()?.ToString();
                 if (PermissionHelper.IsUserRoleHolder((SocketGuildUser) Context.User, targetRole))
                 {
                     UserAccount account = UserAccounts.GetAccount(socketUser);

@@ -19,13 +19,13 @@ namespace Pokemon_discord
                 return;
             }
 
-            var json = File.ReadAllText(FileLocation);
+            string json = File.ReadAllText(FileLocation);
             Pairs = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
 
         public static void SaveData()
         {
-            var json = JsonConvert.SerializeObject(Pairs, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(Pairs, Formatting.Indented);
             File.WriteAllText(FileLocation, json);
         }
     }

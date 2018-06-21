@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -45,14 +46,10 @@ namespace Pokemon_discord.Modules
         public async Task PrintData()
         {
             string desc = null;
-            foreach (var x in DataStorage.Pairs) desc += x.Key + " " + x.Value + "\n";
+            foreach (KeyValuePair<string, string> x in DataStorage.Pairs) desc += x.Key + " " + x.Value + "\n";
             desc += "\b";
-            var embed = new EmbedBuilder().WithTitle("Requested by " + Context.User.Mention)
-                .WithColor(Color.Gold)
-                .WithDescription(desc)
-                .WithThumbnailUrl(ThumbnailUrl)
-                .WithImageUrl("")
-                .Build();
+            Embed embed = new EmbedBuilder().WithTitle("Requested by " + Context.User.Mention).WithColor(Color.Gold)
+                .WithDescription(desc).WithThumbnailUrl(ThumbnailUrl).WithImageUrl("").Build();
             await Context.Channel.SendMessageAsync("", false, embed);
         }
     }

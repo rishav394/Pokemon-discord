@@ -11,25 +11,18 @@ namespace Pokemon_discord.ModuleHelper
 
         public static string TinyUrl(string query)
         {
-            var dataObject = BaseJob(query);
-            if (dataObject.next < 1)
-            {
-                dataObject = BaseJob("Not Found");
-            }
-            Random r = new Random();
+            dynamic dataObject = BaseJob(query);
+            if (dataObject.next < 1) dataObject = BaseJob("Not Found");
+            var r = new Random();
             int rdm = r.Next(dataObject.results.Count);
             return dataObject.results[rdm].media[0].tinygif.url;
         }
 
-
         internal static string BigUrl(string query)
         {
-            var dataObject = BaseJob(query);
-            if (dataObject.next < 1)
-            {
-                dataObject = BaseJob("Not Found");
-            }
-            Random r = new Random();
+            dynamic dataObject = BaseJob(query);
+            if (dataObject.next < 1) dataObject = BaseJob("Not Found");
+            var r = new Random();
             int rdm = r.Next(dataObject.results.Count);
             return dataObject.results[rdm].media[0].gif.url;
         }
@@ -37,7 +30,6 @@ namespace Pokemon_discord.ModuleHelper
         private static dynamic BaseJob(string query)
         {
             string searchUrl = $"{Endpoint}KEY={ApiKey}&q={query}";
-
             string json;
             using (var client = new WebClient())
             {
@@ -46,6 +38,5 @@ namespace Pokemon_discord.ModuleHelper
 
             return JsonConvert.DeserializeObject<dynamic>(json);
         }
-
     }
 }

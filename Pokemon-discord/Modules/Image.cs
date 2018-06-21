@@ -34,7 +34,7 @@ namespace Pokemon_discord.Modules
         }
 
         [Command("Hello")]
-        [Alias("Greet","Repeat")]
+        [Alias("Greet", "Repeat")]
         public async Task ImageShit([Remainder] string args = "")
         {
             const string css = "<style>\n	h1{\n		color: rgb(27,82,122);\n	}\n</style>\n";

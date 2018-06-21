@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
-//Forked directly from https://github.com/LuciiferSK/Luciibot
-
 namespace Pokemon_discord.Modules
 {
     public class HelpModule : ModuleBase<SocketCommandContext>
@@ -33,8 +31,8 @@ namespace Pokemon_discord.Modules
             }
             else
             {
-                ModuleInfo mod = _commands.Modules.FirstOrDefault(
-                    m => m.Name.Replace("Module", "").ToLower() == path.ToLower());
+                ModuleInfo mod =
+                    _commands.Modules.FirstOrDefault(m => m.Name.Replace("Module", "").ToLower() == path.ToLower());
                 if (mod == null)
                 {
                     await ReplyAsync("No module could be found with that name.");
@@ -44,10 +42,9 @@ namespace Pokemon_discord.Modules
                 output.Title = mod.Name;
                 output.Description = $"{mod.Summary}\n" +
                                      (!string.IsNullOrEmpty(mod.Remarks) ? $"({mod.Remarks})\n" : "") +
-                                     (mod.Aliases.Any() ? "" +
-                                                          "Prefix" +
-                                                          $"(es): {string.Join(",", mod.Aliases)}\n" : "") +
-                                     (mod.Submodules.Any()
+                                     (mod.Aliases.Any()
+                                         ? "" + "Prefix" + $"(es): {string.Join(",", mod.Aliases)}\n"
+                                         : "") + (mod.Submodules.Any()
                                          ? $"Submodules: {mod.Submodules.Select(m => m.Name.ToString())}\n"
                                          : "") + " ";
                 AddCommands(mod, ref output);

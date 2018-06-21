@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -11,46 +11,73 @@ namespace Pokemon_discord.Modules
 {
     public class Moderation : ModuleBase<SocketCommandContext>
     {
-        [Command("Mute")]
-        [RequireBotPermission(GuildPermission.ManageRoles)]
-        [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task MuteRealTask(SocketUser socketUser, double timeInMinutes)
+        [Command("Bye")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task LeaveTask()
         {
-            if(PermissionHelper.HasPermission((SocketGuildUser) socketUser, GuildPermission.Administrator))
-            {
-                await ReplyAsync($"The force is stong with {socketUser.Username}. Administrators cant be muted.");
-                return;
-            }
-           // await Context.Guild.us
-
-
+            await ReplyAsync("But But But What did i do :(");
+            await Context.Guild.LeaveAsync();
         }
 
-
-        [Command("BadMute")]
-        [Remarks("Do not use this. This method should only be used when the bot doesnt haver permissions to manage roles.")]
+        [Command("Mute")]
         [Summary("Ask a noob to shadafakup")]
-        [RequireBotPermission(GuildPermission.ManageMessages)]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task MuteTask(SocketUser socketUser, int timeInSeconds)
+        public async Task MuteRealTask(SocketGuildUser socketGuildUser, string forTime = null)
         {
-            if (socketUser == Context.Guild.GetUser(454001308555280418))
+            //check if bot isnt muting admin
+            if (socketGuildUser == Context.Guild.GetUser(454001308555280418))
             {
                 await ReplyAsync("Not happening kiddo.");
                 return;
             }
-            if(PermissionHelper.HasPermission((SocketGuildUser) socketUser, GuildPermission.Administrator))
+
+            if (PermissionHelper.HasPermission(socketGuildUser, GuildPermission.Administrator))
             {
-                await ReplyAsync($"The force is stong with {socketUser.Username}. Administrators cant be muted.");
+                await ReplyAsync($"The force is stong with {socketGuildUser.Username}. Administrators cant be muted.");
                 return;
             }
-            var account = UserAccounts.GetAccount(socketUser);
-            account.UnmuteDateTime[Context.Guild.Id] = DateTime.Now.Add(TimeSpan.FromSeconds(timeInSeconds));
-            UserAccounts.SaveAccounts();
-            await ReplyAsync("aight muted");
+
+            //Fetching the roles
+            SocketRole theMutedRole =
+                (from a in socketGuildUser.Guild.Roles where a.Name == "muted" select a).FirstOrDefault();
+            if (theMutedRole == null)
+            {
+                await socketGuildUser.Guild.CreateRoleAsync("muted", GuildPermissions.None, Color.DarkRed, true);
+                theMutedRole = (from a in socketGuildUser.Guild.Roles where a.Name == "muted" select a)
+                    .FirstOrDefault();
+            }
+
+            //add role
+            await socketGuildUser.AddRoleAsync(theMutedRole);
+
+            //Add role to channel
+            var perms = new OverwritePermissions(sendMessages: PermValue.Deny);
+            foreach (SocketTextChannel socketTextChannel in socketGuildUser.Guild.TextChannels)
+                await socketGuildUser.Guild.GetTextChannel(socketTextChannel.Id)
+                    .AddPermissionOverwriteAsync(theMutedRole, perms);
+            await ReplyAsync($"Allright {socketGuildUser.Mention} was muted from all channels.");
+
+            //TODO: add time dependency
         }
 
-
+        [Command("unmute")]
+        [RequireBotPermission(GuildPermission.ManageRoles)]
+        [RequireUserPermission(GuildPermission.MuteMembers)]
+        public async Task UnmuTask(SocketGuildUser socketGuildUser)
+        {
+            if (PermissionHelper.IsUserRoleHolder(socketGuildUser, "muted"))
+            {
+                SocketRole targetRole = (from a in socketGuildUser.Guild.Roles where a.Name == "muted" select a)
+                    .FirstOrDefault();
+                await socketGuildUser.RemoveRoleAsync(targetRole);
+                await ReplyAsync($"Ok {socketGuildUser.Mention} was unmuted.");
+            }
+            else
+            {
+                await ReplyAsync($"{socketGuildUser.Username} is not muted");
+            }
+        }
 
         [Command("purge")]
         [Alias("prune", "clear")]
@@ -152,7 +179,7 @@ namespace Pokemon_discord.Modules
         }
 
         [Command("prefix")]
-        public async Task PrefiTask([Remainder]string newPrefix = null)
+        public async Task PrefiTask([Remainder] string newPrefix = null)
         {
             if (string.IsNullOrEmpty(newPrefix))
             {

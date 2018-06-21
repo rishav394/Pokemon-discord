@@ -6,10 +6,10 @@ using Pokemon_discord.ModuleHelper;
 
 namespace Pokemon_discord.Modules
 {
-    public class Translate:ModuleBase<SocketCommandContext>
+    public class Translate : ModuleBase<SocketCommandContext>
     {
         [Command("Detect")]
-        public async Task DetecTask([Remainder]string query)
+        public async Task DetecTask([Remainder] string query)
         {
             await ReplyAsync(TranslatorApi.DetectLanguageName(query));
         }
@@ -21,7 +21,7 @@ namespace Pokemon_discord.Modules
         {
             string[] dataStrings = TranslatorApi.Translate(toLang, query);
             var embed = new EmbedBuilder();
-            Random rand = new Random();
+            var rand = new Random();
             if (dataStrings.Length == 1)
             {
                 embed.WithDescription(dataStrings[0]);
@@ -36,6 +36,5 @@ namespace Pokemon_discord.Modules
             embed.WithColor(new Color(rand.Next(0, 256), rand.Next(0, 256), rand.Next(0, 256)));
             await ReplyAsync("", false, embed.Build());
         }
-        
     }
 }

@@ -10,7 +10,7 @@ namespace Pokemon_discord.Core
         // save all user accounts
         public static void SaveUserAccounts(IEnumerable<UserAccount> accounts, string filePath)
         {
-            var json = JsonConvert.SerializeObject(accounts, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(accounts, Formatting.Indented);
             File.WriteAllText(filePath, json);
         }
 
@@ -18,7 +18,7 @@ namespace Pokemon_discord.Core
         public static IEnumerable<UserAccount> GetUserAccounts(string filePath)
         {
             if (!File.Exists(filePath)) return null;
-            var json = File.ReadAllText(filePath);
+            string json = File.ReadAllText(filePath);
             return JsonConvert.DeserializeObject<IEnumerable<UserAccount>>(json);
         }
 

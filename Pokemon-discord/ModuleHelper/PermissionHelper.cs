@@ -13,9 +13,8 @@ namespace Pokemon_discord.ModuleHelper
 
         public static bool IsUserRoleHolder(SocketGuildUser user, string targetRoleName)
         {
-            ulong first = (from r in user.Guild.Roles where r.Name == targetRoleName select r.Id).FirstOrDefault();
-
-            return user.Roles.Contains(user.Guild.GetRole(first));
+            ulong roleId = (from r in user.Guild.Roles where r.Name == targetRoleName select r.Id).FirstOrDefault();
+            return user.Roles.Contains(user.Guild.GetRole(roleId));
         }
     }
 }

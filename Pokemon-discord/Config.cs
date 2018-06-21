@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.IO;
-
+using Newtonsoft.Json;
 
 namespace Pokemon_discord
 {
@@ -9,18 +8,15 @@ namespace Pokemon_discord
     {
         private const string ConfigFolder = "Resources";
         private const string ConfigFile = "config.json";
-
         public static BotConfig Bot;
 
         static Config()
         {
-            if (!Directory.Exists(ConfigFolder))
-                Directory.CreateDirectory(ConfigFolder);
-
+            if (!Directory.Exists(ConfigFolder)) Directory.CreateDirectory(ConfigFolder);
             if (!File.Exists(ConfigFolder + "/" + ConfigFile))
             {
                 Bot = new BotConfig();
-                Bot.PrefixDictionary=new Dictionary<ulong, string>();
+                Bot.PrefixDictionary = new Dictionary<ulong, string>();
                 string json = JsonConvert.SerializeObject(Bot, Formatting.Indented);
                 File.WriteAllText(ConfigFolder + "/" + ConfigFile, json);
             }

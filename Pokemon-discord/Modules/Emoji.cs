@@ -7,15 +7,13 @@ namespace Pokemon_discord.Modules
     public class Emoji : ModuleBase<SocketCommandContext>
     {
         [Command("Emotify")]
-        [Alias("emoji", "emotion", "say","emote")]
+        [Alias("emoji", "emotion", "say", "emote")]
         public async Task Emotify([Remainder] string args)
         {
-
             string[] convertorArray = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
             args = args.ToLower();
-            string convertedText = "";
-
-            bool mentionFound = false;
+            var convertedText = "";
+            var mentionFound = false;
             foreach (char c in args)
             {
                 if (c == '<') mentionFound = true;
